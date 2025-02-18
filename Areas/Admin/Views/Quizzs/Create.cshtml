@@ -1,0 +1,105 @@
+﻿@model DoVuiHaiNao.Models.Quizz
+
+<div class="container ">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0 text-primary fw-bold">📚 Tạo mới bài Quizz</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb  ">
+                <li class="breadcrumb-item"><a class="text-decoration-none" asp-area="Admin" asp-controller="Home"
+                        asp-action="Index">Admin</a></li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" asp-area="Admin" asp-controller="DanhMucs"
+                        asp-action="Index">Bài Quizz</a></li>
+                <li class="breadcrumb-item active fw-bold" aria-current="page">Tạo mới</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-bold">Tiêu đề</label>
+                            <input asp-for="Title" class="form-control " placeholder="Nhập vào tiêu đề" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control "
+                                placeholder="Nhập vào mô tả"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DanhMucId" class="form-label fw-bold">Danh mục</label>
+                            <select asp-for="DanhMucId" class="form-select " asp-items="ViewBag.DanhMucId">
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="DanhMucId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DurationInMinutes" class="form-label fw-bold">Thời gian làm bài
+                                (giây)</label>
+                            <input asp-for="DurationInMinutes" type="number" class="form-control " id="durationInput"
+                                min="1" placeholder="Nhập thời gian làm bài" />
+                            <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
+                            <p id="formattedTime" class="mt-2 text-primary fw-bold"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MucDoId" class="form-label fw-bold">Mức độ</label>
+                            <select asp-for="MucDoId" class="form-select " asp-items="ViewBag.MucDo">
+                                <option value="">-- Chọn mức độ --</option>
+                            </select>
+                            <span asp-validation-for="MucDoId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="File" class="form-label fw-bold">Tải lên file</label>
+                            <input asp-for="File" type="file" class="form-control " id="fileUpload">
+                            <div id="fileName" class="mt-2 text-success fw-bold"></div>
+                        </div>
+
+                        <div class="text-end mt-3">
+                            <a asp-action="Index" class="btn btn-outline-secondary  px-4">Quay lại</a>
+                            <button type="submit" class="btn btn-primary  px-4">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.getElementById('durationInput').addEventListener('input', function () {
+            let seconds = parseInt(this.value, 10);
+            if (isNaN(seconds) || seconds <= 0) {
+                document.getElementById('formattedTime').innerText = "";
+                return;
+            }
+
+            let minutes = Math.floor(seconds / 60);
+            let remainingSeconds = seconds % 60;
+
+            let formattedTime = minutes > 0
+                ? `${minutes} phút${remainingSeconds > 0 ? ` ${remainingSeconds} giây` : ''}`
+                : `${remainingSeconds} giây`;
+
+            document.getElementById('formattedTime').innerText = `⏳ ${formattedTime}`;
+        });
+
+        document.getElementById('fileUpload').addEventListener('change', function () {
+            let fileName = this.files.length > 0 ? `📂 Đã chọn: ${this.files[0].name}` : "";
+            document.getElementById('fileName').innerText = fileName;
+        });
+    </script>
+}

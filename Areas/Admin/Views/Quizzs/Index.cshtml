@@ -1,0 +1,150 @@
+﻿@using DoVuiHaiNao.Models.Enums
+@model IEnumerable<DoVuiHaiNao.Models.Quizz>
+
+@{
+    ViewData["Title"] = "Danh sách Quizz";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 class="text-primary">Danh sách Quizz</h1>
+
+<div class="my-3 p-4 bg-white rounded shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a class="btn btn-primary " asp-action="Create">
+            Tạo mới
+        </a>
+    </div>
+
+    <table class="table table-bordered table-hover ">
+        <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th style=" width: 20em;">Mô tả</th>
+                <th>Thời gian</th>
+                <th>Thể loại</th>
+                <th>Hình ảnh</th>
+                <th>Mức độ</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style=" max-width: 15em;">@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td class="truncate-description">@Html.DisplayFor(modelItem => item.Description)</td>
+
+                    <td>
+                        @{
+                            int minutes = item.DurationInMinutes / 60;
+                            int seconds = item.DurationInMinutes % 60;
+                            string formattedTime = minutes > 0 ? $"{minutes}," : "";
+                            formattedTime += seconds > 0 ? $" {seconds}" : "";
+                        }
+                        <span class="badge bg-info">@formattedTime</span>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.DanhMuc.Title)</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageQuizz))
+                        {
+                            <img src="@Url.Content($"{item.ImageQuizz}")" class=" rounded img-thumbnail" width="80"
+                                height="50" />
+                        }
+                        else
+                        {
+                            <span class="text-muted fst-italic">Không có ảnh</span>
+                        }
+                    </td>
+                    <td>
+                        <span>@Html.DisplayFor(modelItem => item.MucDo.Name)</span>
+                    </td>
+
+                    <td>
+                        @if (item.Status == Status.Approved)
+                        {
+                            <span class="badge bg-success">Đã duyệt</span>
+                        }
+                        else if (item.Status == Status.Pending)
+                        {
+                            <span class="badge bg-warning">Chờ duyệt</span>
+                        }
+
+                    </td>
+                    <td class="text-center">
+                        @if (item.Status == Status.Approved)
+                        {
+                            <a asp-action="Reject" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-lg action-btn"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Approve" asp-route-id="@item.Id" class="btn btn-success btn-sm">
+                                <i class="bi bi-check-lg action-btn"></i>
+                            </a>
+                        }
+
+                        <div class="dropdown d-inline">
+                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button"
+                                id="dropdownMenuButton-@item.Id" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-peace"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton-@item.Id">
+                                <li>
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="bi bi-pencil-square"></i> Sửa
+                                    </a>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item text-danger" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal" data-id="@item.Id">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </button>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-action="Config" asp-route-id="@item.Id">
+                                        <i class="bi bi-gear"></i> Cấu hình
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa quizz này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var deleteModal = document.getElementById("deleteModal");
+            var deleteForm = document.getElementById("deleteForm");
+
+            deleteModal.addEventListener("show.bs.modal", function (event) {
+                var button = event.relatedTarget;
+                var id = button.getAttribute("data-id");
+                deleteForm.setAttribute("action", "/Admin/Quizzs/Delete/" + id);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,75 @@
+﻿@model IEnumerable<DoVuiHaiNao.Models.MucDo>
+
+@{
+    ViewData["Title"] = "Mức độ";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Mức động</h1>
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <p>
+        <a class="btn btn-primary" asp-action="Create">Tạo mới</a>
+    </p>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+
+                    <td>
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="javascript:void(0);" class="text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-id="@item.Id">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa mức độ này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <form id="deleteForm" method="post">
+                    <button type="submit" class="btn btn-danger">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var deleteForm = document.getElementById("deleteForm");
+        var deleteModal = document.getElementById("deleteModal");
+
+        deleteModal.addEventListener("show.bs.modal", function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute("data-id");
+            deleteForm.setAttribute("action", "/Admin/MucDo/Delete/" + id);
+        });
+    </script>
+}

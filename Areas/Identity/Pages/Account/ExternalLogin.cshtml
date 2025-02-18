@@ -1,0 +1,40 @@
+﻿@page
+@model ExternalLoginModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LayoutLogin";
+}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <h4>Vui lòng hoàn tất viêc đăng ký</h4>
+        <div class="col-md-4">
+            <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="email"
+                        placeholder="Nhập vào emailemail." />
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FullName" class="form-control" autocomplete="FullName"
+                        placeholder="nhập vàp tên của bạn" />
+                    <label asp-for="Input.FullName" class="form-label"></label>
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.DisplayName" class="form-control" autocomplete="DisplayName"
+                        placeholder="Nhập vào tên trong trò chơi" />
+                    <label asp-for="Input.DisplayName" class="form-label"></label>
+                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

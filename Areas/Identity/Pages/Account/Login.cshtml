@@ -1,0 +1,86 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "_LayoutLogin";
+}
+<div class="row d-flex justify-content-center align-items-center mt-5">
+    <div class="card shadow-sm col-4 p-4">
+        <section>
+            <h3 class="text-center mb-4 text-info">Đăng nhập</h3>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.UserName" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.UserName" class="form-label"></label>
+                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password"
+                        aria-required="true" />
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label" asp-for="Input.RememberMe">
+                        Ghi nhớ tôi
+                    </label>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng nhập</button>
+                </div>
+
+                <!-- Register Link -->
+                <div class="mt-3 text-center">
+                    <p>
+                        <a class="text-decoration-none " asp-page="./Register"
+                            asp-route-returnUrl="@Model.ReturnUrl">Bạn chưa có tài khoản?</a>
+                    </p>
+                </div>
+
+            </form>
+            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post"
+                class="form-horizontal">
+                <div>
+                    <p>
+                        @if (Model.ExternalLogins != null)
+                        {
+                            var googleLogin = Model.ExternalLogins.FirstOrDefault(p => p.Name == "Google");
+                            if (googleLogin != null)
+                            {
+                                <button type="submit" class="w-100 btn btn-outline-primary" name="provider"
+                                    value="@googleLogin.Name" title="Log in using your @googleLogin.DisplayName account">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+                                        viewBox="0 0 16 16">
+                                        <path fill="#000" d="M0 0h16v16H0z" opacity="0.01"></path>
+                                        <path fill="#FBBC05"
+                                            d="M3.345 8c0-.508.087-.995.24-1.452L.893 4.535A7.7 7.7 0 0 0 .073 8c0 1.245.295 2.42.819 3.463l2.69-2.017A4.5 4.5 0 0 1 3.346 8">
+                                        </path>
+                                        <path fill="#EA4335"
+                                            d="M8.074 3.378c1.126 0 2.144.39 2.944 1.03l2.328-2.275A8.07 8.07 0 0 0 8.074.178c-3.162 0-5.88 1.77-7.18 4.357l2.693 2.013c.62-1.844 2.388-3.17 4.487-3.17">
+                                        </path>
+                                        <path fill="#34A853"
+                                            d="M8.074 12.622c-2.1 0-3.868-1.326-4.488-3.17L.894 11.465c1.3 2.587 4.018 4.357 7.18 4.357 1.95 0 3.813-.678 5.212-1.95l-2.556-1.934c-.721.445-1.63.684-2.657.684">
+                                        </path>
+                                        <path fill="#4285F4"
+                                            d="M15.709 8c0-.462-.073-.96-.182-1.422H8.072V9.6h4.29a3.52 3.52 0 0 1-1.632 2.338l2.555 1.935c1.469-1.335 2.424-3.323 2.424-5.873">
+                                        </path>
+                                    </svg>Tiếp tục với @googleLogin.DisplayName
+                                </button>
+                            }
+                        }
+                    </p>
+                </div>
+            </form>
+
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

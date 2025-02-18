@@ -1,0 +1,60 @@
+﻿@model DoVuiHaiNao.Models.DanhMuc
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Chỉnh sửa danh mục</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-light p-2 rounded">
+                <li class="breadcrumb-item"><a class="text-decoration-none" asp-area="Admin" asp-controller="Home"
+                        asp-action="Index">Admin</a></li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" asp-area="Admin" asp-controller="DanhMucs"
+                        asp-action="Edit">Danh
+                        Mục</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Edit" class="p-4 border rounded bg-light">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+
+                <div class="mb-4">
+                    <label asp-for="Title" class="form-label fw-semibold">Tên danh mục</label>
+                    <input asp-for="Title" class="form-control " placeholder="Nhập tên danh mục..." />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Icon" class="form-label fw-semibold">Icon</label>
+                    <input asp-for="Icon" class="form-control " placeholder="Nhập icon (FontAwesome)..." />
+                    <span asp-validation-for="Icon" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="ColorIcon" class="form-label fw-semibold">Màu Icon</label>
+                    <input asp-for="ColorIcon" type="color" class="form-control form-control-color" />
+                    <span asp-validation-for="ColorIcon" class="text-danger"></span>
+                </div>
+
+                <div class="text-end">
+                    <a asp-action="Index" class="btn btn-outline-secondary  px-4">Quay lại</a>
+                    <button type="submit" class="btn btn-primary  px-4">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
