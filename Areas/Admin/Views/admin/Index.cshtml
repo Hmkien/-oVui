@@ -9,7 +9,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        color: white;
+        color: black;
         border-radius: 10px;
         padding: 15px;
         transition: transform 0.3s ease;
@@ -33,13 +33,13 @@
     <div class="row">
         @foreach (var stat in new[]
         {
-        new { Title = "Tổng số Quiz", Value = Model.SoQuizz, Icon = "bi-clipboard-check", Color = "bg-primary" },
-        new { Title = "Người dùng", Value = Model.NguoiThamGia, Icon = "bi-people", Color = "bg-success" },
-        new { Title = "Lượt tham gia", Value = Model.SoNguoiThamGia, Icon = "bi-bar-chart-line", Color = "bg-danger" }
+        new { Title = "Tổng số Quiz", Value = Model.SoQuizz, Icon = "bi-clipboard-check", Color = "blue" },
+        new { Title = "Người dùng", Value = Model.NguoiThamGia, Icon = "bi-people", Color = "green" },
+        new { Title = "Lượt tham gia", Value = Model.SoNguoiThamGia, Icon = "bi-bar-chart-line", Color = "red" }
         })
         {
             <div class="col-md-4">
-                <div class="card @stat.Color shadow-sm" data-aos="fade-up">
+                <div class="card shadow-sm" style="border-color:@stat.Color" data-aos="fade-up">
                     <div class="card-stats">
                         <div>
                             <h5>@stat.Title</h5>

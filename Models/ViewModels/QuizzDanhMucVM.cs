@@ -10,6 +10,6 @@ namespace DoVuiHaiNao.Models.ViewModels
         [Display(Name = "Màu icon")]
         public string? ColorIcon { get; set; }
         public List<Quizz>? Quizz { get; set; }
-        public int QuestionNumber { get; set; }
+      
     }
 }

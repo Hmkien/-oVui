@@ -417,8 +417,9 @@ D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\refint\DoVuiHaiNao.dll
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\DoVuiHaiNao.pdb
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\DoVuiHaiNao.genruntimeconfig.cache
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\ref\DoVuiHaiNao.dll
-D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\compressed\fxm60sn7qr-a9voia085b.gz
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\scopedcss\Areas\Admin\Views\Shared\_AdminLayout.cshtml.rz.scp.css
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\compressed\hyjzvo3yuv-kwh2pzywel.gz
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\compressed\6ighzyjx9i-kwh2pzywel.gz
 D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\DoVuiHaiNao.sourcelink.json
+D:\Visual Studio\DoVuiHaiNao\DoVuiHaiNao\obj\Debug\net9.0\compressed\fxm60sn7qr-a9voia085b.gz

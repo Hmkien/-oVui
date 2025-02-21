@@ -272,8 +272,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Visual Studio/DoVuiHaiNao/DoVuiHaiNao/Views/Home/getQuizz.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxnZXRRdWl6ei5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Visual Studio/DoVuiHaiNao/DoVuiHaiNao/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Visual Studio/DoVuiHaiNao/DoVuiHaiNao/Views/Home/StartQuizz.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxTdGFydFF1aXp6LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/Visual Studio/DoVuiHaiNao/DoVuiHaiNao/Views/Shared/Error.cshtml]

@@ -45,7 +45,7 @@
 
                         <div class="mb-3">
                             <label asp-for="DurationInMinutes" class="form-label fw-bold">Thời gian làm bài
-                                (giây)</label>
+                               </label>
                             <input asp-for="DurationInMinutes" type="number" class="form-control " id="durationInput"
                                 min="1" placeholder="Nhập thời gian làm bài" />
                             <span asp-validation-for="DurationInMinutes" class="text-danger"></span>
@@ -80,22 +80,7 @@
 </div>
 @section Scripts {
     <script>
-        document.getElementById('durationInput').addEventListener('input', function () {
-            let seconds = parseInt(this.value, 10);
-            if (isNaN(seconds) || seconds <= 0) {
-                document.getElementById('formattedTime').innerText = "";
-                return;
-            }
 
-            let minutes = Math.floor(seconds / 60);
-            let remainingSeconds = seconds % 60;
-
-            let formattedTime = minutes > 0
-                ? `${minutes} phút${remainingSeconds > 0 ? ` ${remainingSeconds} giây` : ''}`
-                : `${remainingSeconds} giây`;
-
-            document.getElementById('formattedTime').innerText = `⏳ ${formattedTime}`;
-        });
 
         document.getElementById('fileUpload').addEventListener('change', function () {
             let fileName = this.files.length > 0 ? `📂 Đã chọn: ${this.files[0].name}` : "";

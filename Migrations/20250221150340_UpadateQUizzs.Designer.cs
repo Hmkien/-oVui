@@ -3,6 +3,7 @@ using System;
 using DoVuiHaiNao.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoVuiHaiNao.Migrations
 {
     [DbContext(typeof(DoVuiHaiNaoContext))]
-    partial class DoVuiHaiNaoContextModelSnapshot : ModelSnapshot
+    [Migration("20250221150340_UpadateQUizzs")]
+    partial class UpadateQUizzs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");

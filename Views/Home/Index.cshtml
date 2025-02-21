@@ -1,4 +1,5 @@
-﻿@model DoVuiHaiNao.Models.ViewModels.HomeVM;
+﻿@using DoVuiHaiNao.Models.Enums
+@model DoVuiHaiNao.Models.ViewModels.HomeVM;
 
 <div class="container " style="margin-bottom:12em">
     <div class="col-lg-3">
@@ -21,177 +22,82 @@
         </div>
     </div>
     <div class="content">
-        <h5>🤔 IQ/Đố vui</h5>
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
+        @if (Model.QuizzDanhMuc != null)
+        {
+            @foreach (var item in Model.QuizzDanhMuc)
+            {
+                <h4 class="mt-3 mb-3">
+                    <i style="color: @item.ColorIcon;" class="@item.Icon"></i>
+                    <span class="ms-2">@item.Title</span>
+                </h4>
+                <div class="row">
+                    @if (item.Quizz != null)
+                    {
+                        foreach (var quizz in item.Quizz)
+                        {
+                            if (quizz.Status != Status.Pending)
+                            {
+                                <div class="col-md-3 mb-3">
+                                    <a class="text-decoration-none" asp-action="getQuizz" asp-route-id="@quizz.Id">
+                                        <div class="card quiz-card p-3  border-0 rounded-lg">
+                                            <img src="@Url.Content(@quizz.ImageQuizz)" class="card-img-top rounded-top" alt="@quizz.Title">
 
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
+                                            <div class="card-body">
+                                                <h6 class="quiz-title  text-primary font-weight-bold">@quizz.Title</h6>
+                                                <p class="text-muted text-center">@quizz.QuestionNumber câu hỏi - 2 lượt chơi</p>
+                                            </div>
+                                        </div>
+                                    </a>
 
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
+                                </div>
+                            }
+                        }
+                    }
                 </div>
-            </div>
-            <h4 class="mt-3 mb-3">
-                <i style="color: #008080" class="fas fa-microscope text"></i>
-                <span class="ms-2">Khoa học</span>
-            </h4>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Đố vui về thế giới động vật hoang dã</h6>
-                        <p>15 câu hỏi - 6770 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card quiz-card p-2">
-                    <img src="image.jpg" class="card-img-top" alt="quiz">
-                    <div class="card-body">
-                        <h6>Câu đố hack não dành cho người IQ cao</h6>
-                        <p>15 câu hỏi - 8937 lượt chơi</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            }
+        }
     </div>
 
 </div>
+<style>
+    .quiz-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        min-height: 2.5em;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .quiz-card {
+        background-color: #f9f9f9;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .quiz-card:hover {
+        transform: translateY(-10px);
+
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .quiz-title {
+        font-size: 1.25rem;
+        color: #007bff;
+    }
+
+    .card-body p {
+        font-size: 1rem;
+        color: #6c757d;
+    }
+</style>

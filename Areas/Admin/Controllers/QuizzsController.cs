@@ -224,15 +224,7 @@ namespace DoVuiHaiNao.Areas.Admin.Controllers
             {
                 return BadRequest("Bài Quiz không tồn tại.");
             }
-            var oQuestion = await _context.Questions
-                .Where(e => e.QuizzId == viewModel.QuizzId)
-                .ToListAsync();
-            var oAnswer = await _context.Answers
-                .Where(a => oQuestion.Select(q => q.Id).Contains(a.QuestionId))
-                .ToListAsync();
-            _context.Answers.RemoveRange(oAnswer);
-            _context.Questions.RemoveRange(oQuestion);
-            await _context.SaveChangesAsync();
+          
             var questions = new List<Question>();
             var answers = new List<Answer>();
             foreach (var item in viewModel.Questions)

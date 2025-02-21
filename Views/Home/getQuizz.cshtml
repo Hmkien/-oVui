@@ -1,0 +1,126 @@
+﻿@model DoVuiHaiNao.Models.ViewModels.QuizzVM
+<style>
+    .quiz-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .quiz-card h5 {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: -4em;
+    }
+
+    .btn-play {
+        background: #ffbe00;
+        border: none;
+        font-weight: bold;
+    }
+
+    .related-card {
+        display: flex;
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ranking-list {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .medal {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffbe00;
+    }
+
+    .quiz-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .quiz-text {
+        flex: 1;
+        max-width: 330px;
+        word-wrap: break-word;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        line-height: 1.4;
+
+    }
+
+    .quiz-image img {
+        width: 200px;
+        border-radius: 10px;
+        margin-right: 5em;
+    }
+</style>
+<div class="container ">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="quiz-card">
+                <span class="badge bg-light text-dark">🔖 KHÁM PHÁ</span>
+                <div class="quiz-container">
+                    <div class="quiz-text">
+                        <h5>@Model.Quizz.Title</h5>
+                    </div>
+                    <div class="quiz-image">
+                        <img src="@Url.Content(Model.Quizz.ImageQuizz)" />
+                    </div>
+                </div>
+                <a class="btn btn-play w-100 mt-2" asp-action="StartQuizz" asp-route-Id="@Model.Quizz.Id">▶ Chơi
+                    ngay</a>
+                <button class="btn btn-outline-secondary w-100 mt-2">📤 Chia sẻ</button>
+
+                <hr>
+                <h6>Mô tả</h6>
+                <p>
+                    ⏳ Thời gian: @Model.Quizz.DurationInMinutes phút | ❓ Số câu: @Model.NumberQuestion | 🔥 Độ khó:
+                    @Model.Quizz.MucDo.Name | 👀 29394 lượt chơi
+                </p>
+                <p>
+                    @Model.Quizz.Description
+                </p>
+            </div>
+            <div class="ranking-list mt-4">
+                <h6>🏆 Bảng xếp hạng</h6>
+                <div class="d-flex align-items-center mt-2">
+                    <span class="medal">🥇</span> <span class="ms-2">Khách</span>
+                    <span class="ms-auto">15/15 câu - 00:27</span>
+                </div>
+                <div class="d-flex align-items-center mt-2">
+                    <span class="medal">🥈</span> <span class="ms-2">Khách</span>
+                    <span class="ms-auto">15/15 câu - 00:27</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h6>Các câu đố liên quan</h6>
+            @foreach (var item in Model.Quizzs)
+            {
+                <a class="text-decoration-none text-dark" asp-action="getQuizz" asp-route-id="@item.Id">
+                    <div class="related-card mt-2">
+                        <img src="@Url.Content(@item.ImageQuizz)" width="30%" class="rounded" alt="quiz">
+                        <div class="ms-2">
+                            <span class="badge bg-light text-dark">🔖 KHÁM PHÁ</span>
+                            <p class="mb-0">@item.Title</p>
+                            <small>@item.QuestionNumber câu hỏi - 456 lượt chơi</small>
+                        </div>
+                    </div>
+                </a>
+            }
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+}

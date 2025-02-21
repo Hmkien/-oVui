@@ -36,13 +36,10 @@
                     <td class="truncate-description">@Html.DisplayFor(modelItem => item.Description)</td>
 
                     <td>
-                        @{
-                            int minutes = item.DurationInMinutes / 60;
-                            int seconds = item.DurationInMinutes % 60;
-                            string formattedTime = minutes > 0 ? $"{minutes}," : "";
-                            formattedTime += seconds > 0 ? $" {seconds}" : "";
-                        }
-                        <span class="badge bg-info">@formattedTime</span>
+
+                        @item.DurationInMinutes
+
+
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.DanhMuc.Title)</td>
                     <td>
