@@ -1,35 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace DoVuiHaiNao.Migrations
 {
     /// <inheritdoc />
-    public partial class UpadateQUizzs : Migration
+    public partial class UpdateQuizzV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<double>(
+            migrationBuilder.AlterColumn<TimeSpan>(
                 name: "DurationInSeconds",
                 table: "Entities",
-                type: "REAL",
+                type: "TEXT",
                 nullable: true,
-                oldClrType: typeof(int),
-                oldType: "INTEGER",
+                oldClrType: typeof(double),
+                oldType: "REAL",
                 oldNullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.AlterColumn<double>(
                 name: "DurationInSeconds",
                 table: "Entities",
-                type: "INTEGER",
+                type: "REAL",
                 nullable: true,
-                oldClrType: typeof(double),
-                oldType: "REAL",
+                oldClrType: typeof(TimeSpan),
+                oldType: "TEXT",
                 oldNullable: true);
         }
     }

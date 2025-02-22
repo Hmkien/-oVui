@@ -345,7 +345,7 @@ namespace DoVuiHaiNao.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DurationInMinutes")
+                    b.Property<int>("DurationInSeconds")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ImageQuizz")

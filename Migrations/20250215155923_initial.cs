@@ -195,7 +195,7 @@ namespace DoVuiHaiNao.Migrations
                     Quizz_Title = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     DanhMucId = table.Column<int>(type: "INTEGER", nullable: true),
-                    DurationInMinutes = table.Column<int>(type: "INTEGER", nullable: true),
+                    DurationInSeconds = table.Column<int>(type: "INTEGER", nullable: true),
                     ImageQuizz = table.Column<string>(type: "TEXT", nullable: true),
                     MucDoId = table.Column<int>(type: "INTEGER", nullable: true),
                     UserId = table.Column<string>(type: "TEXT", nullable: true),

@@ -84,8 +84,10 @@
                 <hr>
                 <h6>Mô tả</h6>
                 <p>
-                    ⏳ Thời gian: @Model.Quizz.DurationInMinutes phút | ❓ Số câu: @Model.NumberQuestion | 🔥 Độ khó:
-                    @Model.Quizz.MucDo.Name | 👀 29394 lượt chơi
+                    ⏳ Thời gian: @($"{Model.Quizz.DurationInSeconds / 60:D2}:{Model.Quizz.DurationInSeconds % 60:D2}")
+                    phút | ❓ Số
+                    câu: @Model.NumberQuestion | 🔥 Độ khó:
+                    @Model.Quizz.MucDo.Name | 👀 @Model.Quizz.LuotChoi lượt chơi
                 </p>
                 <p>
                     @Model.Quizz.Description
@@ -93,14 +95,21 @@
             </div>
             <div class="ranking-list mt-4">
                 <h6>🏆 Bảng xếp hạng</h6>
-                <div class="d-flex align-items-center mt-2">
-                    <span class="medal">🥇</span> <span class="ms-2">Khách</span>
-                    <span class="ms-auto">15/15 câu - 00:27</span>
-                </div>
-                <div class="d-flex align-items-center mt-2">
-                    <span class="medal">🥈</span> <span class="ms-2">Khách</span>
-                    <span class="ms-auto">15/15 câu - 00:27</span>
-                </div>
+                @foreach (var item in Model.Rank.Select((rank, index) => new { rank, index }))
+                {
+                    <div class="d-flex align-items-center mt-2">
+                        <span class="medal">
+                            @(item.index == 0 ? "🥇" : item.index == 1 ? "🥈" : item.index == 2 ? "🥉" : "#" + (item.index +
+                                                    1))
+                    </span>
+                    <span class="ms-2">@item.rank.Name</span>
+                    <span class="ms-auto">
+                        @(Math.Round((item.rank.Score * item.rank.SoCau) / 100, 0))/@item.rank.SoCau câu
+                    </span>
+
+                    </div>
+                                }
+
             </div>
         </div>
         <div class="col-lg-4">
@@ -113,7 +122,7 @@
                         <div class="ms-2">
                             <span class="badge bg-light text-dark">🔖 KHÁM PHÁ</span>
                             <p class="mb-0">@item.Title</p>
-                            <small>@item.QuestionNumber câu hỏi - 456 lượt chơi</small>
+                            <small>@item.QuestionNumber câu hỏi - @item.LuotChoi lượt chơi</small>
                         </div>
                     </div>
                 </a>

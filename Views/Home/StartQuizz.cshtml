@@ -81,7 +81,11 @@
                 <a class="text-decoration-none text-light" asp-action="getQuizz" asp-route-id="@Model.QuizzId">Quay
                     lại</a>
             </div>
-            <div class="Time col-md-6">05:30</div>
+            <div class="Time col-md-6">
+                <span id="examTimer">@($"{Model.DurationInSeconds / 60:D2}:{Model.DurationInSeconds % 60:D2}")</span>
+            </div>
+
+
         </div>
     </div>
     <div class="container" style="margin-top: 10%;">
@@ -98,17 +102,49 @@
             <button id="nextBtn" class="btn btn-success d-none" onclick="nextQuestion()">Tiếp (3s)</button>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        const questions = [
-            { q: "2 + 2 = ?", options: ["3", "4", "5"], answer: 1 },
-            { q: "5 + 3 = ?", options: ["7", "8", "9"], answer: 1 }
-        ];
+        var questions = [
+        @foreach (var item in Model.Questions)
+            {
+                @:{
+                                                                                                                                                                        @:q: "@Html.Raw(item.QuestionText)",
+                @:options: [
+                                                                                                                                                                            @for (int i = 0; i < item.Answers.Count; i++)
+                    {
+                        @: "@Html.Raw(item.Answers[i].AnswerText)" @(i < item.Answers.Count - 1 ? "," : "")
+                    }
+                                @: ],
+                @:answer: @item.Answers.FindIndex(a => a.IsCorrect)
+                @: },
+        }
+    ];
+
+        let duration = @Model.DurationInSeconds+4;
+        let examTimerElement = document.getElementById("examTimer");
+
+        function startExamCountdown() {
+            let examInterval = setInterval(() => {
+                if (duration <= 0) {
+                    clearInterval(examInterval);
+                    completeQuiz();
+                } else {
+                    duration--;
+                    let minutes = Math.floor(duration / 60);
+                    let seconds = duration % 60;
+                    examTimerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+        startExamCountdown();
+
         let currentQuestion = 0;
         let countdownElement = document.getElementById("countdown");
         let nextButton = document.getElementById("nextBtn");
         let nextTimer;
         let answered = false;
+        let score = 0;
+        let quizId = @Model.QuizzId;
 
         function startCountdown() {
             document.getElementById("title").style.display = "none";
@@ -150,7 +186,6 @@
                 answersDiv.appendChild(btn);
             });
         }
-
         function selectAnswer(selectedIndex) {
             if (answered) return;
             answered = true;
@@ -162,8 +197,11 @@
             if (selectedIndex === questionData.answer) {
                 feedback.innerHTML = "<span class='correct'>✔ Đúng! Bạn giỏi quá!</span>";
                 confetti();
+                score += (100 / questions.length);
             } else {
                 feedback.innerHTML = "<span class='wrong'>✖ Sai mất rồi!</span>";
+                confetti();
+                score += 0;
             }
             startNextCountdown();
         }
@@ -187,12 +225,40 @@
             if (currentQuestion < questions.length) {
                 showQuestion();
             } else {
-                document.getElementById("quizScreen").innerHTML = "<h3 class='completion-text'>Hoàn thành!</h3>";
-                confetti();
+                completeQuiz();
             }
+        }
+
+        function submitResult() {
+            var resultData = {
+                QuizId: quizId,
+                Score: score
+            };
+
+            console.log("Dữ liệu gửi:", resultData);
+            $.ajax({
+                url: '@Url.Action("SubmitResult", "Home")',
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(resultData),
+                success: function (response) {
+                    alert("Kết quả đã được gửi thành công!");
+                },
+                error: function (xhr) {
+                    console.error('Lỗi khi gửi kết quả:', xhr.responseText);
+                }
+            });
 
         }
+
+        function completeQuiz() {
+            document.getElementById("quizScreen").innerHTML = "<h3 class='completion-text'>Hoàn thành!</h3>";
+            confetti();
+            submitResult();
+        }
     </script>
+
 </body>
 
 </html>

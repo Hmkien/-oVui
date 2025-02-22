@@ -101,39 +101,45 @@ namespace DoVuiHaiNao.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var oQuizz = await _context.Quizzs.FindAsync(id);
+            if (oQuizz == null)
             {
-                try
-                {
-                    if (quizz.File != null)
-                    {
-
-                        if (quizz.File != null)
-                        {
-
-                            quizz.ImageQuizz = $"~/Image/{await ImportFile(quizz.File)}";
-                        }
-                    }
-                    _context.Update(quizz);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!QuizzExists(quizz.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            ViewData["MucDo"] = new SelectList(_context.MucDos, "Id", "Name", quizz.MucDoId);
-            ViewData["DanhMucId"] = new SelectList(_context.Categories, "Id", "Title", quizz.DanhMucId);
-            return View(quizz);
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["MucDo"] = new SelectList(_context.MucDos, "Id", "Name", quizz.MucDoId);
+                ViewData["DanhMucId"] = new SelectList(_context.Categories, "Id", "Title", quizz.DanhMucId);
+                return View(quizz);
+            }
+
+            try
+            {
+                if (quizz.File != null)
+                {
+                    quizz.ImageQuizz = $"~/Image/{await ImportFile(quizz.File)}";
+                }
+                else
+                {
+                    quizz.ImageQuizz = oQuizz.ImageQuizz;
+                }
+
+                _context.Entry(oQuizz).CurrentValues.SetValues(quizz);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!QuizzExists(quizz.Id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -224,7 +230,16 @@ namespace DoVuiHaiNao.Areas.Admin.Controllers
             {
                 return BadRequest("Bài Quiz không tồn tại.");
             }
-          
+            var oQuestion = await _context.Questions
+                          .Where(e => e.QuizzId == viewModel.QuizzId)
+                          .ToListAsync();
+            var oAnswer = await _context.Answers
+                .Where(a => oQuestion.Select(q => q.Id).Contains(a.QuestionId))
+                .ToListAsync();
+            _context.Answers.RemoveRange(oAnswer);
+            _context.Questions.RemoveRange(oQuestion);
+            await _context.SaveChangesAsync();
+
             var questions = new List<Question>();
             var answers = new List<Answer>();
             foreach (var item in viewModel.Questions)

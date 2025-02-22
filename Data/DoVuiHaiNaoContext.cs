@@ -18,6 +18,9 @@ public class DoVuiHaiNaoContext : IdentityDbContext<ApplicationUser>
     public DbSet<DanhMuc> Categories { get; set; }
     public DbSet<MucDo> MucDos { get; set; }
     public DbSet<AppRole> AppRole { get; set; }
+    public DbSet<ResultAnswer> ResultAnswer { get; set; }
+    public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

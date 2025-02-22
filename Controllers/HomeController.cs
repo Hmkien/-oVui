@@ -1,5 +1,6 @@
 using System.CodeDom;
 using System.Diagnostics;
+using System.Security.Claims;
 using DoVuiHaiNao.Data;
 using DoVuiHaiNao.Models;
 using DoVuiHaiNao.Models.ViewModels;
@@ -36,7 +37,8 @@ namespace DoVuiHaiNao.Controllers
                  ImageQuizz = q.ImageQuizz,
                  QuestionNumber = _context.Questions
                      .Where(e => e.QuizzId == q.Id)
-                     .Count()
+                     .Count(),
+                 LuotChoi = _context.Results.Where(e => e.QuizId == q.Id).Count()
              })
              .ToList()
          })
@@ -86,14 +88,15 @@ namespace DoVuiHaiNao.Controllers
         public async Task<IActionResult> getQuizz(int id)
         {
             var quizz = await _context.Quizzs.FindAsync(id);
-            var QuestionNumber = _context.Questions.Count(e => e.QuizzId == id);
-
-
             if (quizz == null)
             {
                 return NotFound();
             }
+
+            var QuestionNumber = await _context.Questions.CountAsync(e => e.QuizzId == id);
+
             var MucDo = await _context.MucDos.FindAsync(quizz.MucDoId);
+
             var quizzList = await _context.Quizzs
                 .Where(q => q.DanhMucId == quizz.DanhMucId)
                 .Select(q => new Quizz
@@ -103,19 +106,35 @@ namespace DoVuiHaiNao.Controllers
                     Description = q.Description,
                     ImageQuizz = q.ImageQuizz,
                     QuestionNumber = _context.Questions.Count(e => e.QuizzId == q.Id),
-                    MucDo = MucDo
+                    MucDo = MucDo,
+                    LuotChoi = _context.Results.Count(e => e.QuizId == q.Id)
                 })
                 .ToListAsync();
+            var rank = (from result in _context.Results
+                        join user in _context.Users
+                        on result.UserId equals user.Id
+                        join quiz in _context.Quizzs
+                        on result.QuizId equals quiz.Id
+                        orderby result.Score descending
+                        select new Rank
+                        {
+                            Name = user.DisplayName,
+                            SoCau = _context.Questions.Count(e => e.QuizzId == quiz.Id),
+                            Score = result.Score
+                        }).Take(5).ToList();
+
 
             var model = new QuizzVM
             {
-                Quizz = quizz,
+                Quizz = quizzList.FirstOrDefault(e => e.Id == quizz.Id),
                 Quizzs = quizzList,
-                NumberQuestion = QuestionNumber
-
+                NumberQuestion = QuestionNumber,
+                Rank = rank
             };
+
             return View(model);
         }
+
         public async Task<IActionResult> StartQuizz(int Id)
         {
             var questions = await _context.Questions
@@ -140,12 +159,42 @@ namespace DoVuiHaiNao.Controllers
             {
                 QuizzId = Id,
                 Questions = questions,
-                DurationInMinutes = _context.Quizzs.Where(e => e.Id == Id).Select(q => q.DurationInMinutes).FirstOrDefault()
+                DurationInSeconds = _context.Quizzs.Where(e => e.Id == Id).Select(q => q.DurationInSeconds).FirstOrDefault()
             };
 
             return View(quizSubmission);
         }
+        [HttpPost]
+        public async Task<IActionResult> SubmitResult([FromBody] Result model)
+        {
 
+            var UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = new Result
+            {
+                UserId = UserID,
+                QuizId = model.QuizId,
+                Score = model.Score,
+
+            };
+
+            _context.Results.Add(result);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Kết quả đã được lưu!", resultId = result.Id });
+        }
+        public async Task<IActionResult> Result(int resultId)
+        {
+            var result = await _context.Results
+                .Include(r => r.Quiz)
+                .FirstOrDefaultAsync(r => r.Id == resultId);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return View(result);
+        }
 
 
     }

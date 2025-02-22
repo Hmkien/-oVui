@@ -9,7 +9,7 @@ namespace DoVuiHaiNao.Models.ViewModels
 
         [Required]
         public List<QuestionViewModel> Questions { get; set; } = new();
-        public double DurationInMinutes { get; set; }
+        public int DurationInSeconds { get; set; }
     }
 
     public class QuestionViewModel

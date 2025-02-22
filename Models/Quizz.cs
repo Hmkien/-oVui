@@ -13,7 +13,7 @@ public class Quizz : EntityBase
     [ForeignKey("DanhMuc")]
     public int DanhMucId { get; set; }
     [Display(Name = "Thời gian làm bài(s)")]
-    public double DurationInMinutes { get; set; }
+    public int DurationInSeconds { get; set; }
     [Display(Name = "Thể loại")]
     public DanhMuc? DanhMuc { get; set; }
     [Display(Name = "Hình ảnh")]
@@ -27,5 +27,7 @@ public class Quizz : EntityBase
     public IFormFile? File { get; set; }
     [NotMapped]
     public int QuestionNumber { get; set; }
+    [NotMapped]
+    public int LuotChoi { get; set; }
 }
 

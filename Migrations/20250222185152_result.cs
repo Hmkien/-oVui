@@ -5,13 +5,13 @@
 namespace DoVuiHaiNao.Migrations
 {
     /// <inheritdoc />
-    public partial class UpadateQUizzs : Migration
+    public partial class result : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<double>(
-                name: "DurationInSeconds",
+                name: "Score",
                 table: "Entities",
                 type: "REAL",
                 nullable: true,
@@ -24,7 +24,7 @@ namespace DoVuiHaiNao.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "DurationInSeconds",
+                name: "Score",
                 table: "Entities",
                 type: "INTEGER",
                 nullable: true,

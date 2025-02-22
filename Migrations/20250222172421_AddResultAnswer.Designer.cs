@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoVuiHaiNao.Migrations
 {
     [DbContext(typeof(DoVuiHaiNaoContext))]
-    [Migration("20250221150340_UpadateQUizzs")]
-    partial class UpadateQUizzs
+    [Migration("20250222172421_AddResultAnswer")]
+    partial class AddResultAnswer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,8 +345,8 @@ namespace DoVuiHaiNao.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("DurationInSeconds")
-                        .HasColumnType("REAL");
+                    b.Property<int>("DurationInSeconds")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ImageQuizz")
                         .HasColumnType("TEXT");
@@ -393,6 +393,40 @@ namespace DoVuiHaiNao.Migrations
                     b.HasIndex("UserId");
 
                     b.HasDiscriminator().HasValue("Result");
+                });
+
+            modelBuilder.Entity("DoVuiHaiNao.Models.ResultAnswer", b =>
+                {
+                    b.HasBaseType("DoVuiHaiNao.Models.EntityBase");
+
+                    b.Property<int>("ChosenAnswerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ResultId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("ChosenAnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("Entities", t =>
+                        {
+                            t.Property("IsCorrect")
+                                .HasColumnName("ResultAnswer_IsCorrect");
+
+                            t.Property("QuestionId")
+                                .HasColumnName("ResultAnswer_QuestionId");
+                        });
+
+                    b.HasDiscriminator().HasValue("ResultAnswer");
                 });
 
             modelBuilder.Entity("DoVuiHaiNao.Models.AppRole", b =>
@@ -511,6 +545,33 @@ namespace DoVuiHaiNao.Migrations
                     b.Navigation("Quiz");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DoVuiHaiNao.Models.ResultAnswer", b =>
+                {
+                    b.HasOne("DoVuiHaiNao.Models.Answer", "Answer")
+                        .WithMany()
+                        .HasForeignKey("ChosenAnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoVuiHaiNao.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoVuiHaiNao.Models.Result", "Result")
+                        .WithMany()
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Result");
                 });
 
             modelBuilder.Entity("DoVuiHaiNao.Models.DanhMuc", b =>

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoVuiHaiNao.Migrations
 {
     [DbContext(typeof(DoVuiHaiNaoContext))]
-    [Migration("20250221150340_UpadateQUizzs")]
-    partial class UpadateQUizzs
+    [Migration("20250222161840_UpdateQuizzV2")]
+    partial class UpdateQuizzV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -345,8 +345,8 @@ namespace DoVuiHaiNao.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("DurationInSeconds")
-                        .HasColumnType("REAL");
+                    b.Property<TimeSpan>("DurationInSeconds")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageQuizz")
                         .HasColumnType("TEXT");
