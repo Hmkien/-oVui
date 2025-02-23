@@ -4,6 +4,7 @@ using System.Security.Claims;
 using DoVuiHaiNao.Data;
 using DoVuiHaiNao.Models;
 using DoVuiHaiNao.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,6 +51,49 @@ namespace DoVuiHaiNao.Controllers
                 QuizzDanhMuc = quizzDanhMuc,
 
             };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(string keySearch)
+        {
+            var danhMucs = await _context.Categories.ToListAsync();
+            ViewBag.keySearch = keySearch;
+
+            if (string.IsNullOrWhiteSpace(keySearch))
+            {
+                keySearch = "";
+            }
+
+            var allQuizzQuery = _context.Quizzs
+                .Select(q => new Quizz
+                {
+                    Id = q.Id,
+                    Title = q.Title,
+                    Description = q.Description,
+                    ImageQuizz = q.ImageQuizz,
+                    QuestionNumber = _context.Questions.Count(e => e.QuizzId == q.Id),
+                    LuotChoi = _context.Results.Count(e => e.QuizId == q.Id)
+                });
+
+            if (!string.IsNullOrEmpty(keySearch))
+            {
+                string lowerKeySearch = keySearch.ToLower();
+                allQuizzQuery = allQuizzQuery.Where(q => q.Title.ToLower().Contains(lowerKeySearch));
+            }
+
+            var allQuizz = await allQuizzQuery.ToListAsync();
+
+            if (allQuizz.Count == 0)
+            {
+                ViewBag.Message = "Không tìm thấy kết quả nào phù hợp.";
+            }
+
+            var model = new HomeVM
+            {
+                DanhMucs = danhMucs,
+                quizzs = allQuizz
+            };
+
             return View(model);
         }
         public async Task<IActionResult> CategoryQuizz(int Id)
@@ -107,6 +151,7 @@ namespace DoVuiHaiNao.Controllers
                     ImageQuizz = q.ImageQuizz,
                     QuestionNumber = _context.Questions.Count(e => e.QuizzId == q.Id),
                     MucDo = MucDo,
+                    DurationInSeconds = q.DurationInSeconds,
                     LuotChoi = _context.Results.Count(e => e.QuizId == q.Id)
                 })
                 .ToListAsync();
@@ -135,6 +180,7 @@ namespace DoVuiHaiNao.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> StartQuizz(int Id)
         {
             var questions = await _context.Questions
@@ -169,19 +215,25 @@ namespace DoVuiHaiNao.Controllers
         {
 
             var UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = new Result
+            if (UserID != null)
             {
-                UserId = UserID,
-                QuizId = model.QuizId,
-                Score = model.Score,
+                var result = new Result
+                {
+                    UserId = UserID,
+                    QuizId = model.QuizId,
+                    Score = model.Score,
 
-            };
+                };
 
-            _context.Results.Add(result);
-            await _context.SaveChangesAsync();
+                _context.Results.Add(result);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Kết quả đã được lưu!", resultId = result.Id });
+            }
 
-            return Ok(new { message = "Kết quả đã được lưu!", resultId = result.Id });
+
+            return BadRequest("bạn cần đăng nhập ");
         }
+        [Authorize]
         public async Task<IActionResult> Result(int resultId)
         {
             var result = await _context.Results

@@ -4,6 +4,8 @@
 @model DoVuiHaiNao.Models.ViewModels.QuizSubmissionViewModel
 <!DOCTYPE html>
 <html lang="vi">
+<link rel="icon" href="~/Image/icon.jpg" type="image/png">
+
 
 <head>
     <meta charset="UTF-8">
@@ -108,9 +110,9 @@
         @foreach (var item in Model.Questions)
             {
                 @:{
-                                                                                                                                                                        @:q: "@Html.Raw(item.QuestionText)",
+                                                                                                                                                                                                        @:q: "@Html.Raw(item.QuestionText)",
                 @:options: [
-                                                                                                                                                                            @for (int i = 0; i < item.Answers.Count; i++)
+                                                                                                                                                                                                            @for (int i = 0; i < item.Answers.Count; i++)
                     {
                         @: "@Html.Raw(item.Answers[i].AnswerText)" @(i < item.Answers.Count - 1 ? "," : "")
                     }
@@ -120,7 +122,7 @@
         }
     ];
 
-        let duration = @Model.DurationInSeconds+4;
+        let duration = @Model.DurationInSeconds;
         let examTimerElement = document.getElementById("examTimer");
 
         function startExamCountdown() {
@@ -136,7 +138,6 @@
                 }
             }, 1000);
         }
-        startExamCountdown();
 
         let currentQuestion = 0;
         let countdownElement = document.getElementById("countdown");
@@ -159,6 +160,8 @@
                     clearInterval(interval);
                     countdownElement.style.display = "none";
                     startQuiz();
+                    startExamCountdown();
+
                 }
             }, 1000);
         }
@@ -244,6 +247,7 @@
                 data: JSON.stringify(resultData),
                 success: function (response) {
                     alert("Kết quả đã được gửi thành công!");
+                    window.location.href = '@Url.Action("Result", "Home")' + '?resultId=' + response.resultId;
                 },
                 error: function (xhr) {
                     console.error('Lỗi khi gửi kết quả:', xhr.responseText);

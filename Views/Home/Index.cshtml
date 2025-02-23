@@ -23,6 +23,31 @@
         </div>
     </div>
     <div class="content">
+        @if (ViewBag.keySearch != null)
+        {
+            <h4>Kết quả tiềm kiếm cho "@ViewBag.keySearch"</h4>
+        }
+        @if (Model.quizzs?.Any() == true)
+        {
+            foreach (var item in Model.quizzs)
+            {
+                if (item.Status != Status.Pending)
+                {
+                    <div class="col-md-3 mb-3">
+                        <a class="text-decoration-none" asp-action="getQuizz" asp-route-id="@item.Id">
+                            <div class="card quiz-card p-3 border-0 rounded-lg">
+                                <img src="@(string.IsNullOrEmpty(item.ImageQuizz) ? "/images/default.png" : Url.Content(item.ImageQuizz))"
+                                    class="card-img-top rounded-top" alt="@item.Title">
+                                <div class="card-body">
+                                    <h6 class="quiz-title text-primary font-weight-bold">@item.Title</h6>
+                                    <p class="text-muted text-center">@item.QuestionNumber câu hỏi - @item.LuotChoi lượt chơi</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        }
         @if (Model.QuizzDanhMuc != null)
         {
             @foreach (var item in Model.QuizzDanhMuc)
@@ -57,6 +82,7 @@
                     }
                 </div>
             }
+
         }
     </div>
 

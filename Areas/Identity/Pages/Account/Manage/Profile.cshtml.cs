@@ -1,4 +1,5 @@
-﻿using DoVuiHaiNao.Models;
+﻿using DoVuiHaiNao.Data;
+using DoVuiHaiNao.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,15 +10,8 @@ using System.Threading.Tasks;
 
 namespace DoVuiHaiNao.Areas.Identity.Pages.Account.Manage
 {
-    public class ProfileModel : PageModel
+    public class ProfileModel(UserManager<ApplicationUser> userManager, DoVuiHaiNaoContext context) : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public ProfileModel(UserManager<ApplicationUser> userManager)
-        {
-            _userManager = userManager;
-        }
-
         public string AvatarUrl { get; set; }
         public string DisplayName { get; set; }
         public List<QuizHistoryViewModel> QuizHistory { get; set; }
@@ -25,13 +19,13 @@ namespace DoVuiHaiNao.Areas.Identity.Pages.Account.Manage
         public class QuizHistoryViewModel
         {
             public string QuizName { get; set; }
-            public int Score { get; set; }
+            public double Score { get; set; }
             public DateTime PlayedDate { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
             {
                 return NotFound("Không tìm thấy người dùng.");
@@ -40,13 +34,16 @@ namespace DoVuiHaiNao.Areas.Identity.Pages.Account.Manage
             AvatarUrl = "~/Image/avatar.png";
             DisplayName = user.DisplayName ?? "Người chơi";
 
-            // Lấy lịch sử chơi quiz (giả lập dữ liệu)
-            QuizHistory = new List<QuizHistoryViewModel>
-            {
-                new QuizHistoryViewModel { QuizName = "Đố vui kiến thức", Score = 85, PlayedDate = DateTime.Now.AddDays(-1) },
-                new QuizHistoryViewModel { QuizName = "Thử thách IQ", Score = 92, PlayedDate = DateTime.Now.AddDays(-3) },
-                new QuizHistoryViewModel { QuizName = "Ai là triệu phú?", Score = 75, PlayedDate = DateTime.Now.AddDays(-7) }
-            };
+            QuizHistory = (from result in context.Results
+                           join quizz in context.Quizzs
+                           on result.QuizId equals quizz.Id
+                           where result.UserId == user.Id
+                           select new QuizHistoryViewModel
+                           {
+                               QuizName = quizz.Title,
+                               Score = result.Score,
+                               PlayedDate = result.CreatedDate
+                           }).ToList();
 
             return Page();
         }
